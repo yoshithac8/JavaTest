@@ -1,5 +1,4 @@
 ---
-
 - hosts: all
   become: true
   tasks:
@@ -7,3 +6,15 @@
       yum:
         name: docker
         state: latest
+
+    - name: Execute the command in remote shell; stdout goes to the specified file on the remote.
+      shell: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 230601024369.dkr.ecr.ap-south-1.amazonaws.com
+    
+    - name: deploy nginx docker container
+      docker_container:
+        image: 230601024369.dkr.ecr.ap-south-1.amazonaws.com/javatest:latest
+        name: JavaTest
+        state: started
+        auto_remove: true
+        ports:
+          - "8080:80"
