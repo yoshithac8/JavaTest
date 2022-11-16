@@ -5,6 +5,7 @@
       yum:
         name:
           - python-pip
+          - pip3 install docker
         state: latest
         update_cache: true
         
