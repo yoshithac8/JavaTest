@@ -29,4 +29,3 @@
         state: present
         ports:
           - "8080:80"
-      become: true
