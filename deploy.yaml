@@ -28,4 +28,4 @@
         image: 230601024369.dkr.ecr.ap-south-1.amazonaws.com/javatest:latest
         state: started
         ports:
-          - "8080:9090"
+          - "9090:9090"
