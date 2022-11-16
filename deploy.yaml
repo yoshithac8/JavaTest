@@ -4,11 +4,11 @@
   tasks:
     - name: Install Docker
       yum:
-        name: "{{ item }}"
-        loop:
+        name:
           - python-pip
           - pip install docker
         state: latest
+        update_cache: true
 
     - name: Execute the command in remote shell; stdout goes to the specified file on the remote.
       shell: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 230601024369.dkr.ecr.ap-south-1.amazonaws.com
