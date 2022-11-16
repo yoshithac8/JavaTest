@@ -4,7 +4,7 @@
   tasks:
     - name: Install Docker
       yum:
-        name: docker
+        name: pip install docker
         state: latest
 
     - name: Execute the command in remote shell; stdout goes to the specified file on the remote.
@@ -14,7 +14,6 @@
       docker_container:
         image: 230601024369.dkr.ecr.ap-south-1.amazonaws.com/javatest:latest
         name: JavaTest
-        state: started
-        auto_remove: true
+        state: present
         ports:
           - "8080:80"
