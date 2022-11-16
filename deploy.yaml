@@ -6,7 +6,6 @@
       yum:
         name: 
           - python3-pip
-          - pip install docker
         state: latest
 
     - name: Execute the command in remote shell; stdout goes to the specified file on the remote.
