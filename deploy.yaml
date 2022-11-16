@@ -26,6 +26,6 @@
       docker_container:
         name: javatest
         image: 230601024369.dkr.ecr.ap-south-1.amazonaws.com/javatest:latest
-        state: present
+        state: started
         ports:
           - "8080:80"
