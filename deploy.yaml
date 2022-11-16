@@ -6,7 +6,7 @@
       yum:
         name:
           - python-pip
-          - pip install docker
+          - git
         state: latest
         update_cache: true
 
