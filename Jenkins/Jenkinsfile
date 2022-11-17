@@ -1,5 +1,10 @@
+def readpom
+
 node {
- 
+ withCredentials([string(credentialsId: 'SonarJavaTestProjectKey', variable: 'password')]) {
+   
+ def scannerHome = tool 'sonar'
+    
     stage('Clone repo') {
         git credentialsId: 'Git', url: 'git@github.com:NJ24-LAB/JavaTest.git'
     }
@@ -8,12 +13,59 @@ node {
         sh ' mvn clean package '
     } 
     
+        stage('Static Analysis') {
+        withSonarQubeEnv(credentialsId: 'sonarqube') {
+    sh '''mvn package sonar:sonar  \
+      -Dsonar.projectKey=JavaTestProject \
+  -Dsonar.host.url=http://52.66.187.31:9000 \
+  -Dsonar.login= ${password} \
+  -Dproject.settings=sonar-project.properties''' 
+}
+    } 
+    
+      stage("Quality Gate"){
+          timeout(time: 1, unit: 'MINUTES') {
+              def qg = waitForQualityGate()
+              if (qg.status != 'OK') {
+                  error "Pipeline aborted due to quality gate failure: ${qg.status}"
+              }
+          }
+      }  
+      
+          stage('Upload Artifact') {
+               readpom = readMavenPom file: 'pom.xml';
+               def pomversion = readpom.version;
+               echo '${pomversion}'
+               
+        nexusArtifactUploader artifacts: [
+            [
+                artifactId: 'demo', 
+                classifier: '', 
+                file: "target/demo-${pomversion}.war", 
+                type: 'war'
+            ]
+        ], 
+        credentialsId: 'nexus', 
+        groupId: 'com.domain', 
+        nexusUrl: '52.66.187.31:8081', 
+        nexusVersion: 'nexus3', 
+        protocol: 'http', 
+        repository: 'maven-test-repo', 
+        version: "${pomversion}"
+    } 
+          
+          
+    
     stage('Docker Build') {
-        sh 'sh dockerbuild.sh'
+  readpom = readMavenPom file: 'pom.xml';
+               def pomversion = readpom.version;
+               echo "${pomversion}"
+        sh "sh dockerbuild.sh ${pomversion}"
     } 
     
     
-        stage('deploy') {
+     /*   stage('deploy') {
         ansiblePlaybook credentialsId: 'ansible', installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy.yaml'
-    }  
+    }  */
+}
 }
