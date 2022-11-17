@@ -1,0 +1,19 @@
+node {
+ 
+    stage('Clone repo') {
+        git credentialsId: 'Git', url: 'git@github.com:NJ24-LAB/JavaTest.git'
+    }
+
+    stage('Build') {
+        sh ' mvn clean package '
+    } 
+    
+    stage('Docker Build') {
+        sh 'sh dockerbuild.sh'
+    } 
+    
+    
+        stage('deploy') {
+        ansiblePlaybook credentialsId: 'ansible', installation: 'ansible', inventory: 'dev.inv', playbook: 'deploy.yaml'
+    }  
+}
