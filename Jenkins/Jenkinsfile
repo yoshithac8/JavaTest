@@ -17,7 +17,7 @@ node {
         withSonarQubeEnv(credentialsId: 'sonarqube') {
     sh '''mvn package sonar:sonar  \
       -Dsonar.projectKey=JavaTestProject \
-  -Dsonar.host.url=http://3.110.189.159:9000 \
+  -Dsonar.host.url=http://3.108.54.118:9000 \
   -Dsonar.login= ${password} \
   -Dproject.settings=sonar-project.properties''' 
 }
@@ -47,7 +47,7 @@ node {
         ], 
         credentialsId: 'nexus', 
         groupId: 'com.domain', 
-        nexusUrl: '3.110.189.159:8081', 
+        nexusUrl: '3.108.54.118:8081', 
         nexusVersion: 'nexus3', 
         protocol: 'http', 
         repository: 'maven-test-repo', 
