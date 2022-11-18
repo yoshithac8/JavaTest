@@ -17,7 +17,7 @@ node {
         withSonarQubeEnv(credentialsId: 'sonarqube') {
     sh '''mvn package sonar:sonar  \
       -Dsonar.projectKey=JavaTestProject \
-  -Dsonar.host.url=http://52.66.187.31:9000 \
+  -Dsonar.host.url=http://3.110.189.159:9000 \
   -Dsonar.login= ${password} \
   -Dproject.settings=sonar-project.properties''' 
 }
@@ -47,7 +47,7 @@ node {
         ], 
         credentialsId: 'nexus', 
         groupId: 'com.domain', 
-        nexusUrl: '52.66.187.31:8081', 
+        nexusUrl: '3.110.189.159:8081', 
         nexusVersion: 'nexus3', 
         protocol: 'http', 
         repository: 'maven-test-repo', 
@@ -56,11 +56,11 @@ node {
           
           
     
-    stage('Docker Build') {
+    stage('Docker Build & Deploy') {
   readpom = readMavenPom file: 'pom.xml';
                def pomversion = readpom.version;
                echo "${pomversion}"
-        sh "sh dockerbuild.sh ${pomversion}"
+        sh "sh deploy.sh ${pomversion}"
     } 
     
     
