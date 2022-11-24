@@ -2,6 +2,9 @@
 - hosts: all
   become: True
   tasks:
+  vars:
+    version: {{ VersionToDeploy }}
+    
     - name: Install lxml
       pip: name=lxml
       
