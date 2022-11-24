@@ -2,6 +2,9 @@
 - hosts: all
   become: True
   tasks:
+    - name: Install lxml
+      pip: name=lxml
+      
     - name: "Download war file"
       maven_artifact:
         group_id: com.domain
