@@ -10,7 +10,7 @@
         group_id: com.domain
         artifact_id: demo
         extension: war
-        version: "{{VersionToDeploy}}"
+        version: {{VersionToDeploy}}
         repository_url: "http://15.206.186.85:8081/repository/maven-test-repo/"
         username: admin
         password: admin
