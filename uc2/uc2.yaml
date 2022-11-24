@@ -14,5 +14,5 @@
         repository_url: "http://15.206.186.85:8081/repository/maven-test-repo/"
         username: admin
         password: admin
-        dest: "/tmp/ROOT.war"
+        dest: "/tmp/demo.war"
         mode: '0644'
