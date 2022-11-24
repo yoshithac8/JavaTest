@@ -7,9 +7,9 @@
         group_id: com.domain
         artifact_id: demo
         extension: war
-        version: 5.0
+        version: 2.0.1-SNAPSHOT
         repository_url: "http://15.206.186.85:8081/repository/maven-test-repo/"
         username: admin
-        password: xxxxx
+        password: admin
         dest: "/tmp/ROOT.war"
         mode: '0644'
