@@ -46,8 +46,8 @@
       template: 
         src: /usr/local/apache-tomcat-10.0.27/conf/server.xml.j2
         dest: /usr/local/apache-tomcat-10.0.27/conf/server.xml
-        mode: '0777'
         remote_src: yes
+        mode: '0777'
         become: true
       notify: Restart Tomcat
       
