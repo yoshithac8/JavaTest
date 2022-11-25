@@ -47,6 +47,7 @@
         src: /usr/local/apache-tomcat-10.0.27/conf/server.xml.j2
         dest: /usr/local/apache-tomcat-10.0.27/conf/server.xml
         remote_src: true
+        mode: '0644'
       notify: Restart Tomcat
       
     - name: start tomcat services
