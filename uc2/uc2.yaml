@@ -58,6 +58,6 @@
     - name: Restart Tomcat
       shell: /usr/local/apache-tomcat-10.0.27/bin/shutdown.sh
     
-     - name: start tomcat services
+    - name: start tomcat services
       shell: nohup /usr/local/apache-tomcat-10.0.27/bin/startup.sh
 
