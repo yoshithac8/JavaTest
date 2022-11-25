@@ -2,7 +2,7 @@
 - hosts: all
   become: True
   vars:
-    tomcat_port: 8080
+    tomcat_port: 8081
   tasks:    
     - name: Install lxml
       pip: name=lxml
