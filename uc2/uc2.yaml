@@ -3,8 +3,6 @@
   become: True
   vars:
     tomcat_port: 8080
-  vars_files:
-    - server.xml.j2
   tasks:    
     - name: Install lxml
       pip: name=lxml
