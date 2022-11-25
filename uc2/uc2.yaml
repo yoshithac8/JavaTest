@@ -14,7 +14,7 @@
         artifact_id: demo
         extension: war
         version: '{{ version }}'
-        repository_url: "http://52.66.251.95:8081/repository/maven-test-repo/"
+        repository_url: "http://15.206.186.85:8081/repository/maven-test-repo/"
         username: admin
         password: admin
         dest: "/tmp/demo.war"
@@ -32,13 +32,24 @@
       unarchive:
         src: /usr/local/apache-tomcat-10.0.27.tar.gz
         dest: /usr/local
-        remote_src: yes
+        remote_src: yes    
   
     - name: Copy the war file  
       copy:  
         src: /tmp/demo.war  
         dest: /usr/local/apache-tomcat-10.0.27/webapps/ 
         remote_src: yes
+
+    - name: Change port number in tomcat
+      ansible.builtin.lineinfile:
+        path: /usr/local/apache-tomcat-10.0.27/conf/server.xml
+        regexp: '^Connector port='
+        line: Connector port="8080"
+      notify: Restart Tomcat
+
+  handlers:
+    - name: Restart Tomcat
+      shell: sh /usr/local/apache-tomcat-10.0.27/bin/shutdown.sh
 
     - name: start tomcat services
       shell: nohup /usr/local/apache-tomcat-10.0.27/bin/startup.sh
