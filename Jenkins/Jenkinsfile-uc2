@@ -1,0 +1,73 @@
+def readpom
+
+node { 
+ properties([parameters([string(description: 'Artifact version to deploy', name: 'VersionToDeploy')])])
+
+ withCredentials([string(credentialsId: 'SonarJavaTestProjectKey', variable: 'password')]) {
+   
+ def scannerHome = tool 'sonar'
+    
+    stage('Clone repo') {
+        git credentialsId: 'Git', url: 'git@github.com:NJ24-LAB/JavaTest.git'
+    }
+
+    stage('Build') {
+        sh ' mvn clean package '
+    } 
+    
+        stage('Static Analysis') {
+        withSonarQubeEnv(credentialsId: 'sonarqube') {
+    sh '''mvn package sonar:sonar  \
+      -Dsonar.projectKey=JavaTestProject \
+  -Dsonar.host.url=http://3.110.117.21:9000 \
+  -Dsonar.login= ${password} \
+  -Dproject.settings=sonar-project.properties''' 
+}
+    } 
+    
+      stage("Quality Gate"){
+          timeout(time: 1, unit: 'MINUTES') {
+              def qg = waitForQualityGate()
+              if (qg.status != 'OK') {
+                  error "Pipeline aborted due to quality gate failure: ${qg.status}"
+              }
+          }
+      }  
+      
+          stage('Upload Artifact') {
+               readpom = readMavenPom file: 'pom.xml';
+               def pomversion = readpom.version;
+               echo "${pomversion}"
+               
+        nexusArtifactUploader artifacts: [
+            [
+                artifactId: 'demo', 
+                classifier: '', 
+                file: "target/demo-${pomversion}.war", 
+                type: 'war'
+            ]
+        ], 
+        credentialsId: 'nexus', 
+        groupId: 'com.domain', 
+        nexusUrl: '3.110.117.21:8081', 
+        nexusVersion: 'nexus3', 
+        protocol: 'http', 
+        repository: 'maven-test-repo', 
+        version: "${pomversion}"
+    } 
+          
+          
+    
+  /*  stage('Docker Build & Deploy') {
+  readpom = readMavenPom file: 'pom.xml';
+               def pomversion = readpom.version;
+               echo "${pomversion}"
+        sh "sh deploy.sh ${pomversion}"
+    } */
+    
+    
+        stage('deploy') {
+        ansiblePlaybook credentialsId: 'ansible', installation: 'ansible', inventory: 'dev.inv', playbook: 'uc2/uc2.yaml', extras: '-e version="${VersionToDeploy}"'
+    }  
+}
+}
