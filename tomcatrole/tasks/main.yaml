@@ -8,10 +8,9 @@
   shell: rm -rf /tmp/demo.war
 
 - name: Install docker
-  yum:
+  ansible.builtin.package:
     name: docker
     state: latest
-    update_cache: true
 
 - name: Start service docker, if not started
   ansible.builtin.service:
