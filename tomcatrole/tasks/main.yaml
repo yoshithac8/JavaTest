@@ -7,14 +7,14 @@
 - name: remove war file from temp folder
   shell: rm -rf /tmp/demo.war
 
-- name: Install bottle python package
-  ansible.builtin.pip:
-    name: docker
+- name: Install docker-ce (centos) via amazon-linux-extras packages
+  shell: "amazon-linux-extras install docker=18.06.1 -y"
 
-- name: Start service docker, if not started
-  ansible.builtin.service:
+- name: Enable Docker CE service at startup
+  service:
     name: docker
     state: started
+    enabled: yes
 
 - name: "Download war file"
   maven_artifact:
