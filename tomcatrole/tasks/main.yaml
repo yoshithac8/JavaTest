@@ -63,4 +63,3 @@
 - name: start docker container
   shell: docker run --rm -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-weekly zap-baseline.py -t http://15.207.114.111:8080/demo/ -g gen.conf -r zaphtmlreport.html
   
-  
