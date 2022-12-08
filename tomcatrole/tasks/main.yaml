@@ -60,6 +60,3 @@
 - name: Start Tomcat
   shell: nohup /usr/local/apache-tomcat-10.0.27/bin/startup.sh
   
-- name: start docker container
-  shell: docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-weekly zap-baseline.py -t http://65.1.106.212:8080/demo/ -g gen.conf -r testreport.html
-  
