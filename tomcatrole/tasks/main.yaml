@@ -7,10 +7,9 @@
 - name: remove war file from temp folder
   shell: rm -rf /tmp/demo.war
 
-- name: Install docker
-  ansible.builtin.package:
+- name: Install bottle python package
+  ansible.builtin.pip:
     name: docker
-    state: latest
 
 - name: Start service docker, if not started
   ansible.builtin.service:
