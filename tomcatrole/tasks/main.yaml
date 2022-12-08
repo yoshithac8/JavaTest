@@ -7,11 +7,16 @@
 - name: remove war file from temp folder
   shell: rm -rf /tmp/demo.war
 
-- name: Install aptitude
+- name: Install docker
   yum:
     name: docker
     state: latest
     update_cache: true
+
+- name: Start service docker, if not started
+  ansible.builtin.service:
+    name: docker
+    state: started
 
 - name: "Download war file"
   maven_artifact:
