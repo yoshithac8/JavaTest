@@ -23,8 +23,8 @@
     extension: war
     version: '{{ version }}'
     repository_url: "http://3.108.64.239:8081/repository/maven-test-repo/"
-    username: '{{ AnsibleVault }}'
-    password: '{{ AnsibleVault }}'
+    username: admin
+    password: admin
     dest: "/tmp/demo.war"
     mode: '0644'
 
