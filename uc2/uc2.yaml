@@ -1,5 +1,7 @@
 ---
 - hosts: all
   become: True
+  var_files:
+  - secrets.yml
   roles:
     - tomcatrole
