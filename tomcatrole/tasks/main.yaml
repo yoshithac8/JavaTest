@@ -15,6 +15,12 @@
     name: docker
     state: started
     enabled: yes
+    
+- name: Copy the secrets file
+  copy:
+    src: ./secrets.yml
+    dest: /home/ec2-user/
+    remote_src: yes
 
 - name: "Download war file"
   maven_artifact:
@@ -47,7 +53,7 @@
     src: /tmp/demo.war
     dest: /usr/local/apache-tomcat-10.0.27/webapps/
     remote_src: yes
-
+    
 - name: changing tomcat port number
   template:
     src: /var/lib/jenkins/workspace/JavaTestJob/server.xml.j2
