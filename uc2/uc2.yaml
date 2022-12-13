@@ -2,6 +2,6 @@
 - hosts: all
   become: True
   vars_files:
-    - secrets.yml
+    - ../secrets.yml
   roles:
     - tomcatrole
