@@ -28,7 +28,7 @@
     artifact_id: demo
     extension: war
     version: '{{ version }}'
-    repository_url: "http://15.206.84.28:8081/repository/maven-test-repo/"
+    repository_url: "http://3.110.222.120:8081/repository/maven-test-repo/"
     username: '{{ username }}'
     password: '{{ password }}'
     dest: "/tmp/demo.war"
