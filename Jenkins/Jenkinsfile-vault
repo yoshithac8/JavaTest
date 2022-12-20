@@ -1,0 +1,96 @@
+def readpom
+
+node { 
+properties([parameters([gitParameter(branch: '', branchFilter: 'origin/(.*)', defaultValue: 'git@github.com:NJ24-LAB/JavaTest.git', description: 'Select Branch to Build', name: 'Branch', quickFilterEnabled: false, selectedValue: 'NONE', sortMode: 'NONE', tagFilter: '*', type: 'GitParameterDefinition'), string(description: 'Artifact version to deploy', name: 'VersionToDeploy')])])
+
+
+ withCredentials([string(credentialsId: 'SonarJavaTestProjectKey', variable: 'password')]) {
+   
+ def scannerHome = tool 'sonar'
+    
+    stage('Clone repo') {
+        git credentialsId: 'Git', url: 'git@github.com:NJ24-LAB/JavaTest.git'
+    }
+
+    stage('Build') {
+         if (env.BRANCH_NAME == 'dev') {
+        sh ' mvn clean package '
+         } else {
+            echo "skipping stage"
+        }
+    } 
+    
+      stage('Static Analysis') {
+          if (env.BRANCH_NAME == 'dev') {
+        withSonarQubeEnv(credentialsId: 'sonarqube') {
+    sh '''mvn package sonar:sonar  \
+      -Dsonar.projectKey=JavaTestProject \
+  -Dsonar.host.url=http://3.109.56.174:9000 \
+  -Dsonar.login= ${password} \
+  -Dproject.settings=sonar-project.properties''' 
+        }
+          }
+           else {
+            echo "skipping stage"
+        }
+}
+    
+    
+      stage("Quality Gate"){
+           if (env.BRANCH_NAME == 'dev') {
+          timeout(time: 1, unit: 'MINUTES') {
+              def qg = waitForQualityGate()
+              if (qg.status != 'OK') {
+                  error "Pipeline aborted due to quality gate failure: ${qg.status}"
+              }
+          }
+           }
+             else {
+            echo "skipping stage"
+        }
+           }
+ 
+      
+      /*    stage('Upload Artifact') {
+               readpom = readMavenPom file: 'pom.xml';
+               def pomversion = readpom.version;
+               echo "${pomversion}"
+               
+        nexusArtifactUploader artifacts: [
+            [
+                artifactId: 'demo', 
+                classifier: '', 
+                file: "target/demo-${pomversion}.war", 
+                type: 'war'
+            ]
+        ], 
+        credentialsId: 'nexus', 
+        groupId: 'com.domain', 
+        nexusUrl: '3.111.35.218:8081', 
+        nexusVersion: 'nexus3', 
+        protocol: 'http', 
+        repository: 'maven-test-repo', 
+        version: "${pomversion}"
+    } */
+          
+          
+    
+ /*   stage('Docker Build & Deploy') {
+  readpom = readMavenPom file: 'pom.xml';
+               def pomversion = readpom.version;
+               echo "${pomversion}"
+        sh "sh deploy.sh ${pomversion}"
+    } */
+    
+    
+       stage('deploy') {
+withCredentials([string(credentialsId: 'AnsibleVault', variable: 'AnsibleVault'), string(credentialsId: 'vaultdecryptpass', variable: 'vaultdecryptpass')]) {
+    
+    sh 'echo ${vaultdecryptpass} >> vaultdecryptpass.txt'
+   sh 'ansible-playbook  -e version="${VersionToDeploy}" --vault-password-file ./vaultdecryptpass.txt uc2/uc2.yaml -v'
+    sh 'rm vaultdecryptpass.txt'       
+    
+}
+       }
+}
+}
