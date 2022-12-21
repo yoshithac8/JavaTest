@@ -94,7 +94,7 @@
           instance_type: t2.micro
           region: "{{ region }}"
           group_id: "{{ security_group.group_id }}"
-          vpc_subnet_id: "{{ subnet.subnet.id }}"
+          vpc_subnet_id: "{{ public_subnet.subnet.id }}"
           key_name: "{{ keypair.key.name  }}"
           count_tag:
             Name: apacheserver
