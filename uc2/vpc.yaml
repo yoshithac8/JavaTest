@@ -18,6 +18,9 @@
       - name: Install bottle python package
         ansible.builtin.pip:
           name: boto3
+      - name: Install bottle python package
+        ansible.builtin.pip:
+          name: boto3
       - name: create VPC
         ec2_vpc_net:
           name: "{{ vpc_name }}"
