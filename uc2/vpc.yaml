@@ -2,8 +2,8 @@
   - hosts: all
     become: True
     vars:
-      aws_access_key: "AKIATLMHEMNY7EUBJGQO"
-      aws_secret_key: "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"
+      aws_access_key: ""
+      aws_secret_key: ""
       region: "ap-south-1"
       vpc_cidr: 10.192.0.0/16
       vpc_name: "Ansible VPC"
