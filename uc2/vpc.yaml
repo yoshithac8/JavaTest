@@ -7,10 +7,10 @@
       aws_access_key: '{{ access_key }}'
       aws_secret_key: '{{ secret_key }}'
       region: "ap-south-1"
-      vpc_cidr: '{{ vpc_cidr }}'
+      vpc_cidr: 10.192.0.0/16
       vpc_name: "Ansible VPC"
       public_subnet_name: "Ansible Public Subnet"
-      public_subnet_cidr: '{{ public_subnet_cidr }}'
+      public_subnet_cidr: 10.192.10.0/24
       igw_name: "Traffic IGW"
       securitygroup_name: "Ansible Security Group"
       ec2_tag: "WebServer"
