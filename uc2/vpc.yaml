@@ -1,6 +1,8 @@
 ---
   - hosts: all
     become: True
+    vars_files:
+      - ../key.yaml
     vars:
       aws_access_key: '{{ access_key }}'
       aws_secret_key: '{{ secret_key }}'
